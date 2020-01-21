@@ -1,0 +1,11 @@
+{
+  "name": "thronekeeper",
+  "version": "1.0.0",
+  "description": "Keeper to the Throne",
+  "main": "bot.js",
+  "author": "Contrastellar & HaiseXIV",
+  "dependencies": {
+    "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+    "winston": "^3.2.1"
+  }
+}
