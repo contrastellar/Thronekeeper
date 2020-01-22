@@ -29,39 +29,42 @@ client.on('message', msg => {
 	}else if(msg.content === '!avatar') {
 		// Send the user's avatar URL
 		msg.reply(msg.author.avatarURL);
-  }else if (msg.content === '!embed') {
+  }else if (msg.content === '!info') {
 		// We can create embeds using the MessageEmbed constructor
 		// Read more about all that you can do with the constructor
 		// over at https://discord.js.org/#/docs/main/stable/class/RichEmbed
 	const embed = new RichEmbed()
 		// Set the title of the field
-		.setTitle('A slick little embed')
+		.setTitle('Who is Thronekeeper?')
 		// Set the color of the embed
-		.setColor(0xFF0000)
+		.setColor(0x29a329)
 		// Set the main content of the embed
-		.setDescription('Hello, this is a slick embed!');
+		.setDescription('I am Thronekeeper. I am a moderation bot coded in JS, and with the goal of being able to accurately moderate, and control the workings of a server.\n This bot is in early development.');
 		// Send the embed to the same channel as the message
 		msg.channel.send(embed);
-	}else if (msg.content === 'same'){
+  }else if (msg.content === 'same'){
+      //This is a meme
 		msg.channel.send('saaaaaaaaaame');
-	}else if (msg.content.startsWith('!status')){
+  }else if (msg.content.startsWith('!status')){
 		//verifies that Contrastellar#0001 is the only user to do this.
-		if (msg.author.id !== '181187505448681472'){
+		if (msg.author.id !== '181187505448681472' || '299048815455895554'){
 			msg.channel.send('You do not have sufficent perms. https://i.kym-cdn.com/entries/icons/mobile/000/028/925/Screen_Shot_2019-03-15_at_11.01.54_AM.jpg');
 			console.log('invalid status-change attempt from' + msg.author);
 		} else{
-		var arg = msg.content.slice(8);
-			if(arg.length == 0){
-				msg.reply('I need a new Status!');
-				return;
-			}else{
-				client.user.setPresence({ game: { name: arg }, status: 'online' })
-				console.log(msg.createdAt + ' The status was changed to "' + arg + '"');
-				msg.reply('status changed.');
-				return;
+            var arg = msg.content.slice(8);
+                if(arg.length == 0){
+                    msg.reply('I need a new Status!');
+                    return;
+                }else{
+                    client.user.setPresence({ game: { name: arg }, status: 'online' })
+                    console.log(msg.createdAt + ' The status was changed to "' + arg + '"');
+                    msg.reply('status changed.');
+                    return;
 			}
 		}
-	}
+	}else if(msg.content ==='gamer'){
+        msg.reply("We don't say those kind of things around these parts...");
+    }
 });
 
 // Log our bot in using the token from https://discordapp.com/developers/applications/me
