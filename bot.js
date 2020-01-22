@@ -1,53 +1,48 @@
-console.clear();
-console.time('opTime');
-var Discord = require('discord.io');
-var logger = require('winston');
-var auth = require('./auth.json');
-// Configure logger settings
-logger.remove(logger.transports.Console);
-logger.add(new logger.transports.Console, {
-	colorize: true
-});
-logger.level = 'debug';
-// Initialize Discord Bot
-var bot = new Discord.Client({
-	token: auth.token,
-	autorun: true
-});
 
-bot.on('ready', function (evt) {
+// Extract the required classes from the discord.js module
+const { Client, RichEmbed, Attachment } = require('discord.js');
 
-	console.timeLog('opTime');
-	//logger.info('Connected');
-	//logger.info('Logged in as: ');
-	//logger.info(bot.username + ' - (' + bot.id + ')');
-	console.log('...');
-	bot.user;
-	console.log('Thronekeeper is Active. Happy Hunting');
+// Create an instance of a Discord client
+const client = new Client();
+
+/**START**/
+client.on('ready', () => {
+	console.log(`Logged in as ${client.user.tag}!`);
+	var ping = require('ping');
+	 
+	var hosts = ['google.com', 'discordapp.com'];
+	hosts.forEach(function(host){
+		ping.sys.probe(host, function(isAlive){
+			var msg = isAlive ? 'host ' + host + ' is alive' : 'host ' + host + ' is dead';
+			console.log(msg);
+		});
+	});
+	client.user.setPresence({ game: { name: 'programmer bad' }, status: 'dnd' })
 });
 
-bot.on('message', function (user, userID, channelID, message, evt) {
-// Our bot needs to know if it will execute a command
-// It will listen for messages that will start with `!`
-	if (message.substring(0, 1) == '!') {
-		var args = message.substring(1).split(' ');
-		var cmd = args[0];
-		args = args.splice(1);
-		switch(cmd) {
-			// !awake
-			case 'awake':
-			bot.sendMessage({
-				to: channelID,
-					message: 'Finally awake. Eyes up. <3'
-			});
-			break;
-			// Just add any case commands if you want to..
-			case 'debug':
-			bot.sendMessage({
-				to: channelID,
-					message:'Debug code: OMEGA-'+channelID
-			});
-			break;
-		}
+client.on('message', msg => {
+	if (msg.content === 'ping') {
+		msg.reply('pong');
+	}else if(msg.content === 'what is my avatar') {
+		// Send the user's avatar URL
+		msg.reply(msg.author.avatarURL);
+  }else if (msg.content === 'how to embed') {
+		// We can create embeds using the MessageEmbed constructor
+		// Read more about all that you can do with the constructor
+		// over at https://discord.js.org/#/docs/main/stable/class/RichEmbed
+	const embed = new RichEmbed()
+		// Set the title of the field
+		.setTitle('A slick little embed')
+		// Set the color of the embed
+		.setColor(0xFF0000)
+		// Set the main content of the embed
+		.setDescription('Hello, this is a slick embed!');
+		// Send the embed to the same channel as the message
+		msg.channel.send(embed);
+	}else if (msg.content === 'same'){
+		msg.channel.send('saaaaaaaaaame');
 	}
 });
+
+// Log our bot in using the token from https://discordapp.com/developers/applications/me
+client.login('NjY5MjczMDA4OTY3NTE2MTcy.Xie9xQ.lLZo_z7Qi1J8gYOEvFjBWvsPnOQ');
