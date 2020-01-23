@@ -1,7 +1,7 @@
 const { Client, RichEmbed, Attachment } = require('discord.js');
 const chalk = require('chalk');
 
-// Create an instance of a Discord client
+// Create an instance of a Discord client.
 const client = new Client();
 var status = '';
 
