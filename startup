@@ -1,0 +1,26 @@
+var methods = {// Extract the required classes from the discord.js module
+	const { Client, RichEmbed, Attachment } = require('discord.js');
+
+	// Create an instance of a Discord client
+	const client = new Client();
+	var status = '';
+
+	/**START**/
+	client.on('ready', () => {
+		//reports login
+		console.log(`Logged in as ${client.user.tag}!`);
+		//makes sure you're connected
+		var ping = require('ping');
+		 
+		var hosts = ['google.com', 'discordapp.com'];
+		hosts.forEach(function(host){
+			ping.sys.probe(host, function(isAlive){
+				var activePing = isAlive ? 'host ' + host + ' is alive' : 'host ' + host + ' is dead';
+				console.log(activePing);
+			});
+		});
+		client.user.setPresence({ game: { name: 'with a Sword' }, status: 'online' })
+	});
+	client.login('NjY5MjczMDA4OTY3NTE2MTcy.Xie9xQ.lLZo_z7Qi1J8gYOEvFjBWvsPnOQ');
+};
+exports.data = methods;
