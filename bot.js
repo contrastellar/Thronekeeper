@@ -103,7 +103,7 @@ client.on('message', msg => {
     }else if(msg.content === 'This poor bot.'){
 		//another fun thing, except it *should* also report RAM value... <- i dunno how to do it.
         msg.reply("I feel bad for Contra's RAM lol.");
-    }else if(msg.content.startsWith('!purge'){
+    }else if(msg.content.startsWith('!purge')){
         const purgeUser = msg.mentions.users.first();
         console.log(chalk.green('<REPORT> ')+'preparing to purge user '+purgeUser);
         channel.fetchMessages()
