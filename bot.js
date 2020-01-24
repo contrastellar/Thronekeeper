@@ -107,6 +107,6 @@ client.on('message', msg => {
         const purgeUser = msg.mentions.users.first();
         console.log(chalk.green('<REPORT> ')+'preparing to purge user '+purgeUser);
         channel.fetchMessages()
-        .then(messages => console.log('${messages.filter(purgeUser.id)').catch(console.error);
+        .then(messages => console.log('${messages.filter(purgeUser.id)').catch(console.error);)
     }
 });
