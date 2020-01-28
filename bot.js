@@ -104,9 +104,12 @@ client.on('message', msg => {
 		//another fun thing, except it *should* also report RAM value... <- i dunno how to do it.
         msg.reply("I feel bad for Contra's RAM lol.");
     }else if(msg.content.startsWith('!purge')){
-        const purgeUser = msg.mentions.users.first();
-        console.log(chalk.green('<REPORT> ')+'preparing to purge user '+purgeUser);
-        channel.fetchMessages()
-        .then(messages => console.log('${messages.filter(purgeUser.id)').catch(console.error);)
+        var purgeUser = msg.mentions.users.first();
+        var purgeUserID = purgeUser.id;
+        msg.channel.fetchMessages().then(messages => {
+            var count = messages.filter(m => m.author.id === purgeUserID).size;
+            console.log('Purging '+count+' number of messages');
+            
+        });
     }
-});
+})
