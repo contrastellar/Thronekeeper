@@ -75,13 +75,13 @@ client.on('message', msg => {
 			//The following 'if' checks the next argument
 			if(arg.startsWith('playstatus')){
 				arg = arg.slice(11);
-				console.log(chalk.yellow('<REPORT> ')+ msg.createdAt + 'status change call ');
+				console.log(chalk.yellow('<REPORT> ')+'status change call ');
 				if(arg.length == 0){
                     msg.reply('I need a new playing Status!');
                     return;
                 }else{
                     client.user.setPresence({ game: { name: arg }});
-                    console.log(chalk.red('<IMPORTANT> ')+ msg.createdAt + ' The status was changed to "' + arg + '"');
+                    console.log(chalk.red('<IMPORTANT> ') + 'The status was changed to "' + arg + '"');
 					console.log(chalk.yellow('<REPORT> ')+msg.createdAt + ' action performed by:' + msg.author.username);
                     msg.reply('status changed.');
                     return;
@@ -104,20 +104,20 @@ client.on('message', msg => {
 		//another fun thing, except it *should* also report RAM value... <- i dunno how to do it.
         msg.reply("I feel bad for Contra's RAM lol.");
 		
-    }else if(msg.content.startsWith(/*'!purge'*/)){
+    }else if(msg.content.startsWith('!ThronePurge')){
         var purgeUser = msg.mentions.users.first();
         var purgeUserID = purgeUser.id;
-		
+		var messageList = msg.channel.fetchMessages();
         msg.channel.fetchMessages().then(messages => {
             var count = messages.filter(m => m.author.id === purgeUserID).size;
-            console.log('Purging '+count+' number of messages');
-            var i;
-			for(i = 0; i <= count;){
-				if(m.author() === purgeUser){
-					messages.delete();
-					i++
+			var purgeList = messages.filter(m => m.author.id === purgeUserID);
+            console.log('Attempting purge of '+count+' message(s)');
+			messages.forEach(m => {
+				if(m.author.id == purgeUserID){
+					m.delete();
+					console.log('Message Deleted');
 				}
-			}
+			});
         }).catch(console.error());
     }
-}
+});
