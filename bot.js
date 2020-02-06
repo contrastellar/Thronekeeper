@@ -1,4 +1,4 @@
-const { Client, RichEmbed, Attachment } = require('discord.js');
+const {Client, RichEmbed, Attachment } = require('discord.js');
 const chalk = require('chalk');
 
 // Create an instance of a Discord client.
@@ -86,7 +86,21 @@ client.on('message', msg => {
                     msg.reply('status changed.');
                     return;
 				}
-			}else{
+            }else if(arg.startsWith('onlinestatus')){
+                arg = arg.slice(13);
+                if(arg.length ==0){
+                    msg.reply('I need an new online status! <online,dnd>');
+                }else{
+                    if(arg.toString() == "away"){
+                        msg.reply("I do not support an 'away' status, please use online or dnd.")
+                    
+                    }else{
+                        client.user.setPresence({ status: arg.toString() });
+                        console.log(chalk.red('<IMPORTANT> ') + 'The online status was changed to "' + arg + '"');
+                        msg.reply('online status changed.');
+                    }
+                }
+            }else{
 				msg.reply("I need a argument... \n USAGE - !admin <playstatus/onlinestatus/...>");
 			}
 		}
@@ -104,16 +118,39 @@ client.on('message', msg => {
 		//another fun thing, except it *should* also report RAM value... <- i dunno how to do it.
         msg.reply("I feel bad for Contra's RAM lol.");
 		
-    }else if(msg.content.startsWith('!ThronePurge')){
+    }else if(msg.content.startsWith('!UserPurge')){
+        //This works to destroy a specific user's messages
         var purgeUser = msg.mentions.users.first();
         var purgeUserID = purgeUser.id;
+        console.log(purgeUserID);
 		var messageList = msg.channel.fetchMessages();
         msg.channel.fetchMessages().then(messages => {
             var count = messages.filter(m => m.author.id === purgeUserID).size;
 			var purgeList = messages.filter(m => m.author.id === purgeUserID);
             console.log('Attempting purge of '+count+' message(s)');
-			messages.forEach(m => {
+            //This works on messages that are older than 14 days old
+            //Discord API Limit on bulk API requests, however, this technically isn't bulk.
+			messages.forEach(m => { //recursion!
 				if(m.author.id == purgeUserID){
+					m.delete();
+					console.log('Message Deleted');
+				}
+			});
+        }).catch(console.error()); //If it screws up, it'll throw an error to the bot's console
+    }else if(msg.content.startsWith('!IDPurge')){
+        //This works to destroy a specific user's messages, based on user ID
+        var purgeID = msg.content.slice(9);
+        purgeID = purgeID.toString();
+        console.log(purgeID);
+		var messageList = msg.channel.fetchMessages();
+        msg.channel.fetchMessages().then(messages => {
+            var count = messages.filter(m => m.author.id === purgeID).size;
+			var purgeList = messages.filter(m => m.author.id === purgeID);
+            console.log('Attempting purge of '+count+' message(s)');
+            //This works on messages that are older than 14 days old
+            //Discord API Limit on bulk API requests, however, this technically isn't bulk.
+			messages.forEach(m => { //recursion!
+				if(m.author.id == purgeID){
 					m.delete();
 					console.log('Message Deleted');
 				}
