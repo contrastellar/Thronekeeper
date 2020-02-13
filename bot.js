@@ -1,12 +1,15 @@
+console.clear();
 const {Client, RichEmbed, Attachment } = require('discord.js');
+const fs = require('fs');
 const chalk = require('chalk');
+console.log(chalk.red('Starting here'));
+const token = fs.readFileSync('DiscordToken.txt', 'utf8');
 
 // Create an instance of a Discord client.
 const client = new Client();
 var status = '';
 
 /**START**/
-console.clear();
 client.on('ready', () => {
 	//reports login
 	console.log(`Logged in as ${client.user.tag}!`);
@@ -39,7 +42,7 @@ client.on('ready', () => {
 	console.log('Start-up time was...' + bootTime + 'ms'); //reports the time it took to boot the bot in ms
 	setInterval(pingFunction,3600000); //sets up a repeat call of the ping function, that happens every hour
 });
-client.login('NjY5MjczMDA4OTY3NTE2MTcy.Xie9xQ.lLZo_z7Qi1J8gYOEvFjBWvsPnOQ'); //the login info...
+client.login(token); //the login info...
 //somehow move the auth-code to a different file? and exclude it from the 'master' build that goes up to github?
 
 client.on('message', msg => {
@@ -150,7 +153,7 @@ client.on('message', msg => {
             //This works on messages that are older than 14 days old
             //Discord API Limit on bulk API requests, however, this technically isn't bulk.
 			messages.forEach(m => { //recursion!
-				if(m.author.id == purgeID){
+				if(m.author.id.toString() == purgeID){
 					m.delete();
 					console.log('Message Deleted');
 				}
