@@ -12,12 +12,12 @@ var status = '';
 /**START**/
 client.on('ready', () => {
 	//reports login
-	console.log(`Logged in as ${client.user.tag}!`);
-	console.log('Console START');
+	console.log(chalk.green('Logged in')+ ` as `+chalk.blue(`${client.user.tag}!`));
+	console.log('Console '+chalk.cyan('START'));
 	var bootStart = Date.now();
 	//makes sure you're connected
 	var ping = require('ping');
-	 
+	//the hosts to test the ping for. this can be any viable host, however for the baseline, I've just used Google + Discord
 	var hosts = ['google.com', 'discordapp.com'];
 	function pingFunction(){
 		hosts.forEach(function(host){
@@ -42,8 +42,8 @@ client.on('ready', () => {
 	console.log('Start-up time was...' + bootTime + 'ms'); //reports the time it took to boot the bot in ms
 	setInterval(pingFunction,3600000); //sets up a repeat call of the ping function, that happens every hour
 });
+
 client.login(token); //the login info...
-//somehow move the auth-code to a different file? and exclude it from the 'master' build that goes up to github?
 
 client.on('message', msg => {
 	var sameCooldown = false;
@@ -59,15 +59,10 @@ client.on('message', msg => {
 		// Set the color of the embed
 		.setColor(0x29a329)
 		// Set the main content of the embed
-		.setDescription('I am Thronekeeper. I am a moderation bot coded in JS, and with the goal of being able to accurately moderate, and control the workings of a server.\n This bot is in early development.\n Version: Beta-0.1');
+		.setDescription(`I am Thronekeeper. I am a moderation bot coded in JS, and with the goal of being able to accurately moderate, and control the workings of a server.\n This bot is in early development.\n Version: Beta-1.1`);
 		// Send the embed to the same channel as the message
 		msg.channel.send(embed);
-	}else /* if (msg.content === 'same' && sameCooldown == false){ /**need to make a cooldown thingy*
-		//This is a meme --
-		msg.channel.send('saaaaaaaaaame'); console.log('help');
-		sameCooldown = true;
-		setTimeout(function(){sameCooldown = false;},30000);
-	}else */ if (msg.content.startsWith('!admin')){ //admin-only commands
+	}else if (msg.content.startsWith('!admin')){ //admin-only commands
 		if (msg.author.id !== '181187505448681472'){ //verifies that Contrastellar#0001 is the only user to do this.
 			msg.channel.send('You do not have sufficent perms. https://i.kym-cdn.com/entries/icons/mobile/000/028/925/Screen_Shot_2019-03-15_at_11.01.54_AM.jpg'); //clowns on a fool
 			console.log('invalid status-change attempt from' + msg.author + ' ' + msg.author.username);
@@ -145,13 +140,12 @@ client.on('message', msg => {
         var purgeID = msg.content.slice(9);
         purgeID = purgeID.toString();
         console.log(purgeID);
-		var messageList = msg.channel.fetchMessages();
+		var messageIDList = msg.channel.fetchMessages();
         msg.channel.fetchMessages().then(messages => {
             var count = messages.filter(m => m.author.id === purgeID).size;
 			var purgeList = messages.filter(m => m.author.id === purgeID);
             console.log('Attempting purge of '+count+' message(s)');
-            //This works on messages that are older than 14 days old
-            //Discord API Limit on bulk API requests, however, this technically isn't bulk.
+            //This works on messages that are older than 14 days old... Discord API Limit on bulk API requests, however, this technically isn't bulk.
 			messages.forEach(m => { //recursion!
 				if(m.author.id.toString() == purgeID){
 					m.delete();
@@ -159,5 +153,13 @@ client.on('message', msg => {
 				}
 			});
         }).catch(console.error());
-    }
+    }else if(msg.content.startsWith('~MSGCount')){
+		var msgCount = msg.content.slice(10);
+		if(msgCount.length == 0){
+			msg.reply(' I need a <USERID> to parse...');
+			
+		}else{
+			msg.reply('im workin on it...');
+		}
+	}
 });
