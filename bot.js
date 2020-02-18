@@ -135,24 +135,31 @@ client.on('message', msg => {
 				}
 			});
         }).catch(console.error()); //If it screws up, it'll throw an error to the bot's console
+		msg.reply('check the console to assure objective completion.');
     }else if(msg.content.startsWith('!IDPurge')){
         //This works to destroy a specific user's messages, based on user ID
-        var purgeID = msg.content.slice(9);
+        var purgeID = msg.content.slice(9, 27);
         purgeID = purgeID.toString();
         console.log(purgeID);
-		var messageIDList = msg.channel.fetchMessages();
-        msg.channel.fetchMessages().then(messages => {
-            var count = messages.filter(m => m.author.id === purgeID).size;
-			var purgeList = messages.filter(m => m.author.id === purgeID);
-            console.log('Attempting purge of '+count+' message(s)');
-            //This works on messages that are older than 14 days old... Discord API Limit on bulk API requests, however, this technically isn't bulk.
-			messages.forEach(m => { //recursion!
-				if(m.author.id.toString() == purgeID){
-					m.delete();
-					console.log('Message Deleted');
-				}
-			});
-        }).catch(console.error());
+		var aroundID = msg.content.slice(28, 46);
+		aroundID = aroundID.toString();
+		if(aroundID == ''){
+			msg.reply('I need an ID for this to be around.');
+		}else{
+			var messageIDList = msg.channel.fetchMessages();
+			msg.channel.fetchMessages({ around: aroundID }).then(messages => {
+				var count = messages.filter(m => m.author.id === purgeID).size;
+				var purgeList = messages.filter(m => m.author.id === purgeID);
+				console.log('Attempting purge of '+count+' message(s)');
+				//This works on messages that are older than 14 days old... Discord API Limit on bulk API requests, however, this technically isn't bulk.
+				messages.forEach(m => { //recursion!
+					if(m.author.id.toString() == purgeID){
+						m.delete();
+						console.log('Message Deleted');
+					}
+				});
+			}).catch(console.error());
+		}
     }else if(msg.content.startsWith('~MSGCount')){
 		var msgCount = msg.content.slice(10);
 		if(msgCount.length == 0){
@@ -160,6 +167,11 @@ client.on('message', msg => {
 			
 		}else{
 			msg.reply('im workin on it...');
+		}
+	}else if(msg.author.id == 154380183644798976){
+		var calloutChange = Math.floor(Math.random() * 11);
+		if(msg.channel.nsfw == true && calloutChange == 10){
+			msg.channel.send('stop being horny!');
 		}
 	}
 });
