@@ -108,9 +108,6 @@ client.on('message', msg => {
 		console.log('rng was ' + gamerRandom);
 		if(gamerRandom == 10){
 			msg.reply("We don't say the hard R here...");
-			console.log("'gamer' responce was called");
-		}else{ //this conditional reports whether or not it happens. this is for debugging stuff
-			console.log("'gamer' responce was not called (bad RNG)");
 		}
     }else if(msg.content === 'This poor bot.'){
 		//another fun thing, except it *should* also report RAM value... <- i dunno how to do it.
@@ -170,8 +167,10 @@ client.on('message', msg => {
 		}
 	}else if(msg.author.id == 154380183644798976){
 		var calloutChange = Math.floor(Math.random() * 11);
-		if(msg.channel.nsfw == true && calloutChange == 10){
-			msg.channel.send('stop being horny!');
+		if(msg.channel.nsfw == true){
+			if(calloutChange == 10){
+				msg.channel.send('stop being horny!');
+			}
 		}
 	}
 });
