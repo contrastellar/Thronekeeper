@@ -1,7 +1,8 @@
-console.clear();
 const {Client, RichEmbed, Attachment } = require('discord.js');
 const fs = require('fs');
 const chalk = require('chalk');
+const functionList ;
+console.clear();
 console.log(chalk.red('Starting here'));
 const token = fs.readFileSync('DiscordToken.txt', 'utf8');
 
@@ -38,7 +39,7 @@ client.on('ready', () => {
 	pingFunction();
 	var bootFinish = Date.now(); //makes another timestamp
 	var bootTime = (bootFinish - bootStart); //subtracts the ms values of the two vars
-	client.user.setPresence({ game: { name: 'now awake' }, status: 'away' }) //sets the default 'awake' status
+	client.user.setPresence({ game: { name: 'waking up...' }, status: 'online' }) //sets the default 'awake' status
 	console.log('Start-up time was...' + bootTime + 'ms'); //reports the time it took to boot the bot in ms
 	setInterval(pingFunction,3600000); //sets up a repeat call of the ping function, that happens every hour
 });
@@ -141,7 +142,7 @@ client.on('message', msg => {
 		var aroundID = msg.content.slice(28, 46);
 		aroundID = aroundID.toString();
 		if(aroundID == ''){
-			msg.reply('I need an ID for this to be around.');
+			msg.reply('I need a message ID for deletion request.');
 		}else{
 			var messageIDList = msg.channel.fetchMessages();
 			msg.channel.fetchMessages({ around: aroundID }).then(messages => {
@@ -166,11 +167,16 @@ client.on('message', msg => {
 			msg.reply('im workin on it...');
 		}
 	}else if(msg.author.id == 154380183644798976){
-		var calloutChange = Math.floor(Math.random() * 11);
+		var calloutChange = Math.floor(Math.random() * 8);
 		if(msg.channel.nsfw == true){
 			if(calloutChange == 10){
 				msg.channel.send('stop being horny!');
 			}
 		}
-	}
+	}else if(msg.content.startsWith('!horny')){
+        msg.channel.send("NO HORNY ALLOWED >:(");
+    }else if(msg.content.startsWith('!announce')){
+        var announceBody = msg.content.slice(10);
+        msg.channel.send(announceBody + "... Thronekeeper has spoken...");
+    }
 });
