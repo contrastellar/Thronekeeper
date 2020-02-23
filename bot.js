@@ -1,7 +1,7 @@
 const {Client, RichEmbed, Attachment } = require('discord.js');
 const fs = require('fs');
 const chalk = require('chalk');
-const functionList ;
+//const functionList ;
 console.clear();
 console.log(chalk.red('Starting here'));
 const token = fs.readFileSync('DiscordToken.txt', 'utf8');
