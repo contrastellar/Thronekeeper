@@ -8,25 +8,27 @@ const token = fs.readFileSync('DiscordToken.txt', 'utf8');
 
 // Create an instance of a Discord client.
 const client = new Client();
-var status = '';
+const status = '';
+
 
 /**START**/
 client.on('ready', () => {
 	//reports login
 	console.log(chalk.green('Logged in')+ ` as `+chalk.blue(`${client.user.tag}!`));
 	console.log('Console '+chalk.cyan('START'));
-	var bootStart = Date.now();
+	const bootStart = Date.now();
 	//makes sure you're connected
-	var ping = require('ping');
+	const ping = require('ping');
 	//the hosts to test the ping for. this can be any viable host, however for the baseline, I've just used Google + Discord
-	var hosts = ['google.com', 'discordapp.com'];
+	const hosts = ['google.com', 'discordapp.com'];
+
 	function pingFunction(){
 		hosts.forEach(function(host){
-			var pStart = Date.now();
+			const pStart = Date.now();
 			ping.sys.probe(host, function(isAlive){
-				var pFinish = Date.now();
-				var pReport = pFinish - pStart;
-				var activePing = isAlive ? host + ' is alive... report: '+pReport+'ms': 'host ' + host + ' is dead';
+				const pFinish = Date.now();
+				const pReport = pFinish - pStart;
+				const activePing = isAlive ? host + ' is alive... report: ' + pReport + 'ms' : 'host ' + host + ' is dead';
 				console.log(chalk.cyan('<STARTUP>')+' Ping Report');
 				console.log(activePing);
 				console.log('--------------------------------------------------');
@@ -47,6 +49,15 @@ client.on('ready', () => {
 client.login(token); //the login info...
 
 client.on('message', msg => {
+	function outstandingGirls(person){
+		if(person == "gabby"){
+			msg.channel.send("OUTSTANDING GIRL");
+		}else if(person == "catherine"){
+			msg.channel.send("OUTSTANDING GIRL");
+		}else if(person == "aevery"){
+			msg.channel.send("OUTSTANDING GIRL");
+		}
+	}
 	var sameCooldown = false;
 	if (msg.content === '!pog') { //simple call and responce.
 		msg.reply("i don't have nitro :(");
@@ -167,16 +178,35 @@ client.on('message', msg => {
 			msg.reply('im workin on it...');
 		}
 	}else if(msg.author.id == 154380183644798976){
-		var calloutChange = Math.floor(Math.random() * 8);
+		const calloutChange = Math.floor(Math.random() * 8);
 		if(msg.channel.nsfw == true){
 			if(calloutChange == 10){
 				msg.channel.send('stop being horny!');
 			}
 		}
 	}else if(msg.content.startsWith('!horny')){
+		
         msg.channel.send("NO HORNY ALLOWED >:(");
+		
     }else if(msg.content.startsWith('!announce')){
+		
         var announceBody = msg.content.slice(10);
         msg.channel.send(announceBody + "... Thronekeeper has spoken...");
-    }
+		
+    }else if(msg.content.startsWith('!catherine')){
+	
+		outstandingGirls("catherine");
+		
+	}else if(msg.content.startsWith('!aevery')){
+		
+		outstandingGirls("aevery");
+		
+	}else if(msg.content.startsWith('!gabby')){
+		
+		outstandingGirls("gabby");
+	}else if(msg.content.startsWith('fuck you')){
+		msg.channel.send("fffFFUCK yOU");
+	}else if(msg.content.startsWith('!retro')){
+		msg.channel.send("the fuck do you want me to say??");
+	}
 });
