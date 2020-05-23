@@ -1,14 +1,21 @@
 const {Client, RichEmbed, Attachment } = require('discord.js');
 const fs = require('fs');
 const chalk = require('chalk');console.clear();
-console.log(chalk.red('Starting here'));
-const token = fs.readFileSync('DiscordToken.txt', 'utf8');
-
+let token;
+try{
+	token = fs.readFileSync('DiscordToken.txt', 'utf8');
+}catch(error){
+	console.log(chalk.red("No file exists for 'DiscordToken.txt'"));
+}
 // Create an instance of a Discord client.
 const client = new Client();
+client.login(token); //the login info...
+
+//Constants for emojis?
 
 /**START**/
 client.on('ready', () => {
+	console.log(chalk.greenBright("Starting Here"));
 	//reports login
 	console.log(chalk.green('Logged in')+ ` as `+chalk.blue(`${client.user.tag}!`));
 	console.log('Console '+chalk.cyan('START'));
@@ -30,34 +37,34 @@ client.on('ready', () => {
 				console.log('--------------------------------------------------');
 			});
 		});
-		//sends a message to the log that in 30 minutes a ping test will occur this also works as a timer, that's called every time pingFunction is called
-		//setTimeout(function(){ console.log(chalk.green('Next Ping will occur in 30min.'));},1800000);
 	}
 	//calls the ping function
 	pingFunction();
-	var bootFinish = Date.now(); //makes another timestamp
-	var bootTime = (bootFinish - bootStart); //subtracts the ms values of the two vars
-	client.user.setPresence({game: {name: 'waking up...'}, status: 'online'}).then(r =>console.log(chalk.green("Presence Established"))) // sets the default 'awake' status
+	let bootFinish = Date.now(); //makes another timestamp
+	let bootTime = (bootFinish - bootStart); //subtracts the ms values of the two vars
+	client.user.setPresence({game: {name: 'waking up...'}, status: 'dnd'}).then(r =>console.log(chalk.green("Presence Established"))) // sets the default 'awake' status
 	console.log('Start-up time was...' + bootTime + 'ms'); //reports the time it took to boot the bot in ms
 	//setInterval(pingFunction,3600000); //sets up a repeat call of the ping function, that happens every hour
 });
 
-client.login(token); //the login info...
-
 client.on('message', msg => {
 	function outstandingGirls(person){
+		const borgar = client.emojis.find(emoji => emoji.name === "borgartime");
 		if(person == "gabby"){
-			msg.channel.send("OUTSTANDING GIRL");
+			msg.channel.send("prolly watching anime");
 		}else if(person == "catherine"){
-			msg.channel.send("OUTSTANDING GIRL");
+			msg.channel.send("https://cdn.discordapp.com/attachments/704535856546971669/707805380058677328/unknown-1.png");
 		}else if(person == "aevery"){
-			msg.channel.send("OUTSTANDING GIRL");
+			msg.channel.send("is it borgar time?");
+			msg.channel.send(`${borgar}`);
 		}else if(person == "ember"){
 			msg.channel.send("https://cdn.discordapp.com/attachments/572675846679166977/702064325019303946/dont_worry_about_it.png");
+		}else if(person == "borgar"){
+			msg.channel.send("https://cdn.discordapp.com/attachments/595426652037578764/708176442856570890/2b3ea62d-f488-4988-8394-93f72873333d.png")
 		}
 	}
 	var sameCooldown = false;
-	if (msg.content === '!pog') { //simple call and responce.
+	if (msg.content === '!pog') { //simple call and response.
 		msg.reply("i don't have nitro :(");
 	}else if(msg.content === '!avatar') { //sends the user's avatar back to them
 		// Send the user's avatar URL
@@ -79,7 +86,7 @@ client.on('message', msg => {
 	}else if (msg.content.startsWith('!admin')){ //admin-only commands
 
 		if (msg.author.id !== '181187505448681472'){ //verifies that Contrastellar#0001 is the only user to do this.
-			msg.channel.send('You do not have sufficent perms. https://i.kym-cdn.com/entries/icons/mobile/000/028/925/Screen_Shot_2019-03-15_at_11.01.54_AM.jpg'); //clowns on a fool
+			msg.channel.send('You do not have sufficient perms. https://i.kym-cdn.com/entries/icons/mobile/000/028/925/Screen_Shot_2019-03-15_at_11.01.54_AM.jpg'); //clowns on a fool
 
 		} else {
 			console.log(chalk.yellow('<REPORT> ')+ msg.createdAt + ' good admin call from ' + msg.author.username);
@@ -118,7 +125,7 @@ client.on('message', msg => {
 		}
 	}else if(msg.content.includes('gamer')){
 		//a fun little command with a 1/10th chance to respond to someone saying 'gamer'
-		var gamerRandom = Math.floor(Math.random() * 11);
+		let gamerRandom = Math.floor(Math.random() * 11);
 		console.log('rng was ' + gamerRandom);
 		if(gamerRandom == 5){
 			msg.reply("We don't say the hard R here...");
@@ -187,7 +194,8 @@ client.on('message', msg => {
     }else if(msg.content.startsWith('!announce')){
 		
         var announceBody = msg.content.slice(10);
-        msg.channel.send(announceBody + "... Thronekeeper has spoken...");
+        msg.channel.send(announceBody);
+        msg.delete();
 		
     }else if(msg.content.startsWith('!catherine')){
 	
@@ -230,7 +238,7 @@ client.on('message', msg => {
 				'!catherine - certified good girl \n\n' +
 				'!aevery - certified good girl \n\n' +
 				'!gabby - certified good girl(?) \n\n' +
-				'!retro - the fuck you want me to say \n\n' +
+				'!yoink - meme = acquired' +
 				"there's also like a dozen easter eggs...");
 		msg.channel.send(embed);
 
@@ -246,8 +254,8 @@ client.on('message', msg => {
 	}else if(msg.content.includes("is") && msg.content.includes("asleep")){
 		if(msg.content.includes("ember") || msg.content.includes("gabby")){
 			msg.channel.send("idk but they probably should be. https://cdn.discordapp.com/attachments/158125349769576448/700588892805660682/8af7e897e8d7beae83d188832adc8fb7.mp4")
-		}else if(msg.content.includes("poyo")){
-			msg.channel.send("poyo");
+		}else if(msg.content.includes("catherine")){
+			msg.channel.send("prolly should be");
 		}else {
 			msg.channel.send("idk dude, go kiss them and find out");
 		}
@@ -288,20 +296,21 @@ client.on('message', msg => {
 			break;
 		}
 
-	}else if(msg.content.includes("wait")){
+	}else if(msg.content.startsWith("wait")){
 		msg.channel.send("oh no");
 
 	}else if(msg.content.includes("a toaster")){
 		msg.channel.send("https://cdn.discordapp.com/attachments/595436575177834496/703847959472636004/photo_2020-04-26_01-00-13.jpg");
 
-	}else if(msg.content.includes("cat ")){
+	}else if(msg.content.startsWith("cat ")){
 		msg.channel.send("https://cdn.discordapp.com/attachments/621695346371985408/702217363847774229/image0.jpg");
 
 	}else if(msg.content.startsWith("F")){
 		msg.channel.send("salute... o7");
 
 	}else if(msg.content.includes("uwu") && msg.author.id != 669273008967516172){
-		msg.channel.send(":uwu:");
+		const uwu = client.emojis.find(emoji => emoji.name === "uwu");
+		msg.channel.send(`${uwu}`);
 		
 	}else if(msg.content.startsWith('!roll')){
 		let dPos = msg.content.indexOf("d");
@@ -314,6 +323,8 @@ client.on('message', msg => {
 		} else{
 			msg.channel.send(diceRoll(arg1, arg2));
 		}
+	}else if(msg.content.startsWith('!yoink')){
+		msg.channel.send("https://cdn.discordapp.com/attachments/672637539340779540/712854456034918430/559.png");
 	}
 });
 
