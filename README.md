@@ -1,6 +1,2 @@
-# Thronekeeper BETA
-# Thronekeeper is a straight-forward recursion bot, that is used to primarily subvert the typical Message deletion message found in other moderation bots.
-# This is a recursion method, where per-channel, she takes the message log, and deletes the messages that match up with a specific user ID.
-Wanna keep up with Development?
-https://discord.gg/r5hX7tM
---Gabby
+# Thronekeeper Alpha
+Moderation bot made in JS.
