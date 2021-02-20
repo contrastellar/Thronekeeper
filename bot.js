@@ -1,7 +1,10 @@
+// noinspection JSIgnoredPromiseFromCall
 const {Client, RichEmbed, Attachment } = require('discord.js');
 const fs = require('fs');
-const chalk = require('chalk');console.clear();
+const chalk = require('chalk');
+console.clear();
 let token;
+
 try{
 	token = fs.readFileSync('DiscordToken.txt', 'utf8');
 }catch(error){
@@ -31,10 +34,8 @@ client.on('ready', () => {
 			ping.sys.probe(host, function(isAlive){
 				const pFinish = Date.now();
 				const pReport = pFinish - pStart;
-				const activePing = isAlive ? host + ' is alive... report: ' + pReport + 'ms' : 'host ' + host + ' is dead';
-				console.log(chalk.cyan('<STARTUP>')+' Ping Report');
-				console.log(activePing);
-				console.log('--------------------------------------------------');
+				const activePing = isAlive ? chalk.gray(host) + ' is alive... report: ' + pReport + 'ms' : 'host ' + host + ' is dead';
+				console.log(chalk.cyan('<STARTUP>')+' Ping Report ' + activePing);
 			});
 		});
 	}
@@ -42,7 +43,7 @@ client.on('ready', () => {
 	pingFunction();
 	let bootFinish = Date.now(); //makes another timestamp
 	let bootTime = (bootFinish - bootStart); //subtracts the ms values of the two vars
-	client.user.setPresence({game: {name: 'waking up...'}, status: 'dnd'}).then(r =>console.log(chalk.green("Presence Established"))) // sets the default 'awake' status
+	client.user.setPresence({game: {name: '!TKInfo || !TKCommands'}, status: 'online'}).then(r =>console.log(chalk.green("Presence Established"))) // sets the default 'awake' status
 	console.log('Start-up time was...' + bootTime + 'ms'); //reports the time it took to boot the bot in ms
 	//setInterval(pingFunction,3600000); //sets up a repeat call of the ping function, that happens every hour
 });
@@ -55,12 +56,12 @@ client.on('message', msg => {
 		}else if(person == "catherine"){
 			msg.channel.send("https://cdn.discordapp.com/attachments/704535856546971669/707805380058677328/unknown-1.png");
 		}else if(person == "aevery"){
-			msg.channel.send("is it borgar time?");
+			msg.channel.send("is it borgar time? https://cdn.discordapp.com/attachments/595426652037578764/708176442856570890/2b3ea62d-f488-4988-8394-93f72873333d.png");
 			msg.channel.send(`${borgar}`);
 		}else if(person == "ember"){
 			msg.channel.send("https://cdn.discordapp.com/attachments/572675846679166977/702064325019303946/dont_worry_about_it.png");
 		}else if(person == "borgar"){
-			msg.channel.send("https://cdn.discordapp.com/attachments/595426652037578764/708176442856570890/2b3ea62d-f488-4988-8394-93f72873333d.png")
+			msg.channel.send("")
 		}
 	}
 	var sameCooldown = false;
@@ -147,7 +148,7 @@ client.on('message', msg => {
 			console.log('Attempting purge of '+count+' message(s)');
             //This works on messages that are older than 14 days old
             //Discord API Limit on bulk API requests, however, this technically isn't bulk.
-			messages.forEach(m => { //recursion!
+			messages.forEach(m => {
 				if(m.author.id == purgeUserID){
 					m.delete();
 					console.log('Message Deleted');
@@ -212,7 +213,7 @@ client.on('message', msg => {
 		msg.channel.send("fffFFUCK yOU");
 
 	}else if(msg.content.startsWith('!retro')){
-		msg.channel.send("the fuck do you want me to say??");
+		msg.channel.send(">:(");
 
 	}else if(msg.content.includes('420') && msg.author.id != 669273008967516172){
 		msg.channel.send("no");
@@ -283,7 +284,7 @@ client.on('message', msg => {
 		msg.channel.send("nice, you fucking weeb");
 
 	}else if(msg.content.includes("shut up")){
-		let rando = Math.floor(Math.random()*2);
+		let rando = Math.floor((Math.random()*2)+0.5);
 		switch (rando) {
 			case 0:
 				msg.channel.send("https://i.redd.it/wrc2zc4rt0e31.jpg");
@@ -305,11 +306,8 @@ client.on('message', msg => {
 	}else if(msg.content.startsWith("cat ")){
 		msg.channel.send("https://cdn.discordapp.com/attachments/621695346371985408/702217363847774229/image0.jpg");
 
-	}else if(msg.content.startsWith("F")){
-		msg.channel.send("salute... o7");
-
 	}else if(msg.content.includes("uwu") && msg.author.id != 669273008967516172){
-		const uwu = client.emojis.find(emoji => emoji.name === "uwu");
+		const uwu = client.emojis.find(emoji => emoji.name === "uwuMASTER");
 		msg.channel.send(`${uwu}`);
 		
 	}else if(msg.content.startsWith('!roll')){
@@ -325,8 +323,20 @@ client.on('message', msg => {
 		}
 	}else if(msg.content.startsWith('!yoink')){
 		msg.channel.send("https://cdn.discordapp.com/attachments/672637539340779540/712854456034918430/559.png");
+	}else if(msg.content.startsWith('!TKAvatar')){
+		msg.reply(msg.author.displayAvatarURL());
+	}else if(msg.content.startsWith('!monkeyball')){
+		msg.reply("Who knows, ask tyler.");
 	}
 });
+
+//TODO Add an "Welcome, I'm here" Message on Guild join
+//TODO Make this as a standalone function to "call"
+client.on('guildCreate', guild => {
+	let main = guild.channels.find("General");
+	guild.main.send("Hello!");
+});
+
 
 function diceRoll(numberOfDie, sizeOfDie){
 	var sum = 0;
